@@ -20,29 +20,47 @@ print("\n\t\t Convex Hull Algorithms \n\n")
 # 1. Graham's Scan Algorithm 
 
 def ConvexHull2GS(P = []):
-    print(P)
-    
+
     n = len(P)      # Defining n = |P|
-    hull = []       # Defining hull as an empty list of vertices
     LUpper = []     
     LLower = []
     
     P.sort()        # Organize elements in lexicographic order (sort() method by default does that in python)
-    print(P)
-    
+        
     # Creating LUpper
     LUpper.append(P[0])     # Insert first and second element in LUpper 
     LUpper.append(P[1])     
     
     for i in range(2,n):
         LUpper.append(P[i])
-        det = orientation2(P[i-2],P[i-1],P[i])
-        if len(LUpper) > 2:
+        u = len(LUpper)
+        det = orientation2(LUpper[u-3],LUpper[u-2],LUpper[u-1])     # Calculating turn of last 3 elements of LUpper
+        if u > 2:
             if det > 0:
                 LUpper.remove(P[i-1])               # Add elif det == 0
 
             
     # Creating LLower
+    LLower.append(P[n-1])       # n is 1-based, so last two elements are P[n-2] and P[n-1]
+    LLower.append(P[n-2])
+    for i in range(n-3,1,-1):
+        LLower.append(P[i])
+        u = len(LLower)
+        det = orientation2(LLower[u-3],LLower[u-2],LLower[u-1])
+        if u > 2:
+            if det > 0:
+                LLower.remove(P[i+1])               # Add elif det == 0            
+    
+                            
+    LLower.remove(LLower[0])    # Remove first and last elements of LLower
+    LLower.remove(LLower[len(LLower) - 1])
+    
+    # Creating list of convex hull vertices L
+    L = sorted(LUpper + LLower)
+    return L
+        
+    
+    
     
         
 # Defining orientation predicate function in R2
@@ -63,7 +81,11 @@ def main():
         print("Please insert the algorithm's name:")
         name = input()
         if name == "Graham's Scan":
-            ConvexHull2GS(points)
+            print("Length of point list:")
+            print(len(points))
+            L = ConvexHull2GS(points)
+            print(L)
+            print(len(L))
         elif name in noList:
             print("Do you want to exit?")
             choice = input()
