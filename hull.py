@@ -20,14 +20,31 @@ print("\n\t\t Convex Hull Algorithms \n\n")
 
 def ConvexHullGS(points = []):
     hull = []       # Defining hull as an empty list of vertices
-    print("I am a function")
+
     
     
 
     
 # Main function 
 def main():
-    print("Main function")
+    noList = ["No","NO","no","nO"]
+    yesList = ["Yes","yes","YES", "yES", "yeS", "YEs"]
+    while(1):
+        print("Please insert the algorithm's name:")
+        name = input()
+        if name == "Graham's Scan":
+            ConvexHullGS([5,4])
+        elif name in noList:
+            print("Do you want to exit?")
+            choice = input()
+            if choice in yesList:
+                print("Ok then, exiting...")
+                break
+            elif choice in noList:
+                continue
+        else:
+            print("Try again")
+
 
 if __name__ == "__main__":
     main()
