@@ -23,7 +23,7 @@ def ConvexHullGS(points = []):
     print("I am a function")
     
     
-    
+
     
 # Main function 
 def main():
