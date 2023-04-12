@@ -1,5 +1,6 @@
 import sys 
 import random
+
 # NOTES: 
 # 1. The following program calculates convex hull of a randomly generated set (list) of elements of R^2 (and R^3).
 # Every algorithm is defined as a function for organization purposes. 
@@ -18,11 +19,36 @@ print("\n\t\t Convex Hull Algorithms \n\n")
 
 # 1. Graham's Scan Algorithm 
 
-def ConvexHullGS(points = []):
+def ConvexHull2GS(P = []):
+    print(P)
+    
+    n = len(P)      # Defining n = |P|
     hull = []       # Defining hull as an empty list of vertices
-    print(points)
-    print(len(points))
+    LUpper = []     
+    LLower = []
+    
+    P.sort()        # Organize elements in lexicographic order (sort() method by default does that in python)
+    print(P)
+    
+    # Creating LUpper
+    LUpper.append(P[0])     # Insert first and second element in LUpper 
+    LUpper.append(P[1])     
+    
+    for i in range(2,n):
+        LUpper.append(P[i])
+        det = orientation2(P[i-2],P[i-1],P[i])
+        if len(LUpper) > 2:
+            if det > 0:
+                LUpper.remove(P[i-1])               # Add elif det == 0
 
+            
+    # Creating LLower
+    
+        
+# Defining orientation predicate function in R2
+# Note: pi[0] = xi, pi[1] = yi, where i = 0,1,2
+def orientation2(p0 = [0,0], p1 = [0,0], p2 = [0,0]):
+    return (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p2[0] - p0[0]) * (p1[1] - p0[1])
     
     
 
@@ -37,7 +63,7 @@ def main():
         print("Please insert the algorithm's name:")
         name = input()
         if name == "Graham's Scan":
-            ConvexHullGS(points)
+            ConvexHull2GS(points)
         elif name in noList:
             print("Do you want to exit?")
             choice = input()
