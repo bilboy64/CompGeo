@@ -29,7 +29,8 @@ def ConvexHullGS(points = []):
     
 # Main function 
 def main():
-    points = [(random.randint(0,100),random.randint(0,100)) for i in range(80)]     # Creating 80 random points of R2   
+    maxElements = 80
+    points = [(random.randint(0,100),random.randint(0,100)) for i in range(maxElements)]     # Creating <maxElements> random points of R2   
     noList = ["No","NO","no","nO"]
     yesList = ["Yes","yes","YES", "yES", "yeS", "YEs"]
     while(1):
