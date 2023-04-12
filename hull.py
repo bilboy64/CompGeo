@@ -1,5 +1,5 @@
 import sys 
-
+import random
 # NOTES: 
 # 1. The following program calculates convex hull of a randomly generated set (list) of elements of R^2 (and R^3).
 # Every algorithm is defined as a function for organization purposes. 
@@ -20,6 +20,8 @@ print("\n\t\t Convex Hull Algorithms \n\n")
 
 def ConvexHullGS(points = []):
     hull = []       # Defining hull as an empty list of vertices
+    print(points)
+    print(len(points))
 
     
     
@@ -27,13 +29,14 @@ def ConvexHullGS(points = []):
     
 # Main function 
 def main():
+    points = [(random.randint(0,100),random.randint(0,100)) for i in range(80)]     # Creating 80 random points of R2   
     noList = ["No","NO","no","nO"]
     yesList = ["Yes","yes","YES", "yES", "yeS", "YEs"]
     while(1):
         print("Please insert the algorithm's name:")
         name = input()
         if name == "Graham's Scan":
-            ConvexHullGS([5,4])
+            ConvexHullGS(points)
         elif name in noList:
             print("Do you want to exit?")
             choice = input()
