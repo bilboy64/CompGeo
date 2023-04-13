@@ -1,5 +1,7 @@
 import sys 
 import random
+# import matplotlib.pyplot as plt
+
 
 # NOTES: 
 # 1. The following program calculates convex hull of a randomly generated set (list) of elements of R^2 (and R^3).
@@ -16,9 +18,39 @@ import random
 # Implementation part 1
 print("\n\t\t Convex Hull Algorithms \n\n")
 
-
 # 1. Graham's Scan Algorithm 
 
+        
+# Defining orientation predicate function in R2
+# Note: pi[0] = xi, pi[1] = yi, where i = 0,1,2
+def orientation2(p0 = [0,0], p1 = [0,0], p2 = [0,0]):
+    return (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p2[0] - p0[0]) * (p1[1] - p0[1])
+    
+
+
+# Defining function that calculates squared distance between two elements of R2
+# Note: pi[0] = xi, pi[1] = yi, where i = 0,1
+def SqDist(p0=[0,0],p1=[0,0]):
+    return (p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1])
+
+
+
+# Defining function that compares two elements of R2 using the orientation predicate 
+# Note: it covers collinear case 
+def cmp(p0=[0,0],p1=[0,0],p2=[0,0]):
+    det = orientation2(p0,p1,p2)
+    if det == 0:        # Collinear case
+        if SqDist(p0,p2) >= SqDist(p0,p1):
+            return -1
+        else:
+            return 1
+    elif det < 0:
+        return -1
+    else: 
+        return 1
+    
+
+# Implementing my version of Graham's Scan Algorithm in R2
 def ConvexHull2GS(P = []):
 
     n = len(P)      # Defining n = |P|
@@ -33,11 +65,8 @@ def ConvexHull2GS(P = []):
     
     for i in range(2,n):
         LUpper.append(P[i])
-        u = len(LUpper)
-        det = orientation2(LUpper[u-3],LUpper[u-2],LUpper[u-1])     # Calculating turn of last 3 elements of LUpper
-        if u > 2:
-            if det > 0:
-                LUpper.remove(P[i-1])               # Add elif det == 0
+        while len(LUpper) > 2 and orientation2(LUpper[-3],LUpper[-2],LUpper[-1]) > 0:
+            LUpper.pop(-2)               # Add elif det == 0
 
             
     # Creating LLower
@@ -45,36 +74,25 @@ def ConvexHull2GS(P = []):
     LLower.append(P[n-2])
     for i in range(n-3,1,-1):
         LLower.append(P[i])
-        u = len(LLower)
-        det = orientation2(LLower[u-3],LLower[u-2],LLower[u-1])
-        if u > 2:
-            if det > 0:
-                LLower.remove(P[i+1])               # Add elif det == 0            
+        while len(LLower) > 2 and orientation2(LLower[-3],LLower[-2],LLower[-1]) > 0:
+            LLower.pop(-2)               # Add elif det == 0            
     
                             
     LLower.remove(LLower[0])    # Remove first and last elements of LLower
     LLower.remove(LLower[len(LLower) - 1])
     
     # Creating list of convex hull vertices L
-    L = sorted(LUpper + LLower)
+    L = LUpper + LLower
     return L
         
     
     
     
-        
-# Defining orientation predicate function in R2
-# Note: pi[0] = xi, pi[1] = yi, where i = 0,1,2
-def orientation2(p0 = [0,0], p1 = [0,0], p2 = [0,0]):
-    return (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p2[0] - p0[0]) * (p1[1] - p0[1])
-    
-    
-
-    
+  
 # Main function 
 def main():
     maxElements = 80
-    points = [(random.randint(0,100),random.randint(0,100)) for i in range(maxElements)]     # Creating <maxElements> random points of R2   
+    points = [(random.randint(-10,100),random.randint(-10,100)) for i in range(maxElements)]     # Creating <maxElements> random points of R2   
     noList = ["No","NO","no","nO"]
     yesList = ["Yes","yes","YES", "yES", "yeS", "YEs"]
     while(1):
@@ -83,9 +101,17 @@ def main():
         if name == "Graham's Scan":
             print("Length of point list:")
             print(len(points))
+            print(points)
             L = ConvexHull2GS(points)
-            print(L)
+            print("Convex Hull: ", L)
             print(len(L))
+            # plt.plot(L,color = 'magenta', marker = 'o')
+            # plt.xticks(range(0,len(L)+1,1))
+            # plt.xlabel('x')
+            # plt.ylabel('y')
+            # plt.title("Convex Hull")
+            
+            # plt.show()
         elif name in noList:
             print("Do you want to exit?")
             choice = input()
