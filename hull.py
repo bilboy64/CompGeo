@@ -1,6 +1,7 @@
 import sys 
 import random
-# import matplotlib.pyplot as plt
+import matplotlib.rcsetup as rcsetup
+import matplotlib.pyplot as plt
 
 
 # NOTES: 
@@ -14,12 +15,7 @@ import random
 # 3. Terminate the program by either typing in "No" when asked if you want to continue, or by simply hitting ctrl + C.
 
 
-
-# Implementation part 1
-print("\n\t\t Convex Hull Algorithms \n\n")
-
-# 1. Graham's Scan Algorithm 
-
+# Functions
         
 # Defining orientation predicate function in R2
 # Note: pi[0] = xi, pi[1] = yi, where i = 0,1,2
@@ -49,9 +45,15 @@ def cmp(p0=[0,0],p1=[0,0],p2=[0,0]):
     else: 
         return 1
     
+    
 
-# Implementing my version of Graham's Scan Algorithm in R2
-def ConvexHull2GS(P = []):
+
+# Implementation 
+print("\n\t\t Convex Hull Algorithms \n\n")
+
+    
+# 1. Graham's Scan Algorithm (R2) 
+def GrahamsScan2(P = []):
 
     n = len(P)      # Defining n = |P|
     LUpper = []     
@@ -65,7 +67,7 @@ def ConvexHull2GS(P = []):
     
     for i in range(2,n):
         LUpper.append(P[i])
-        while len(LUpper) > 2 and orientation2(LUpper[-3],LUpper[-2],LUpper[-1]) > 0:
+        while len(LUpper) > 2 and orientation2(LUpper[-3],LUpper[-2],LUpper[-1]) >= 0:
             LUpper.pop(-2)               # Add elif det == 0
 
             
@@ -74,7 +76,7 @@ def ConvexHull2GS(P = []):
     LLower.append(P[n-2])
     for i in range(n-3,1,-1):
         LLower.append(P[i])
-        while len(LLower) > 2 and orientation2(LLower[-3],LLower[-2],LLower[-1]) > 0:
+        while len(LLower) > 2 and orientation2(LLower[-3],LLower[-2],LLower[-1]) >= 0:
             LLower.pop(-2)               # Add elif det == 0            
     
                             
@@ -86,7 +88,43 @@ def ConvexHull2GS(P = []):
     return L
         
     
+# 2. Gift-wrapping (Jarvis March) Algorithm (R2)
+def JarvisMarch(P = []):
     
+    n = len(P)
+    r0 = 0        # Finding leftmost point P[r0] (r0 is index)
+    for i in range(1,n):
+        if P[i][0] < P[r0][0]:
+            r0 = i
+        elif P[i][0] == P[r0][0]:
+            if P[i][1] > P[r0][1]: 
+                r0 = i
+                
+    pos = P.index(P[r0])
+    L = []        # Initialize list of convex hull vertices with element r0
+    
+    p = pos
+    q = 0
+    while(1):
+        L.append(P[p])
+        q = (p + 1) % n
+        for i in range(n):        # We iterate over every element of P except for r0, which is the leftmost point
+            det = orientation2(P[p],P[i],P[q])         # Calculating turn of r0,i,q, if they are collinear then choose the farthest element
+            if det < 0 or (det == 0 and SqDist(P[i],P[p]) > SqDist(P[q],P[p])):
+                q = i
+        p = q
+        if p == pos:
+            break
+        
+    return L
+        
+    
+# 3. QuickHull Algorithm in R2
+def QuickHull(P = []):
+    L = []
+    
+    return L
+
     
   
 # Main function 
@@ -99,19 +137,61 @@ def main():
         print("Please insert the algorithm's name:")
         name = input()
         if name == "Graham's Scan":
-            print("Length of point list:")
-            print(len(points))
-            print(points)
-            L = ConvexHull2GS(points)
-            print("Convex Hull: ", L)
-            print(len(L))
-            # plt.plot(L,color = 'magenta', marker = 'o')
-            # plt.xticks(range(0,len(L)+1,1))
-            # plt.xlabel('x')
-            # plt.ylabel('y')
-            # plt.title("Convex Hull")
+            print("Points:", points)
+            print("Length of point list:" , len(points))
             
-            # plt.show()
+            L = GrahamsScan2(points)
+            n = len(L)
+            print("Convex Hull: ", L)
+            print("Vertices:", n)
+            
+            x = [L[i][0] for i in range(n)]
+            y = [L[i][1] for i in range(n)]
+    
+            plt.plot(x,y,color = 'magenta', marker = 'o')
+            plt.xticks(range(0, maxElements + 1, 1))
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title("Convex Hull Graham's Scan")
+            plt.show()
+            
+        elif name == "Gift-Wrapping" or name == "Jarvis March":
+            print("Points:", points)
+            print("Length of point list:" , len(points))
+            
+            L = JarvisMarch(points)
+            n = len(L)
+            print("Convex Hull: ", L)
+            print("Vertices:", n)
+                        
+            x = [L[i][0] for i in range(n)]
+            y = [L[i][1] for i in range(n)]
+            
+            plt.plot(x,y,color = 'magenta', marker = 'o')
+            plt.xticks(range(0, maxElements + 1, 1))
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title("Convex Hull Jarvis March")
+            plt.show()
+            
+        elif name == "QuickHull":
+            print("Points:", points)
+            print("Length of point list:" , len(points))
+            
+            L = QuickHull(points)
+            n = len(L)
+            print("Convex Hull: ", L)
+            print("Vertices:", n)
+                        
+            x = [L[i][0] for i in range(n)]
+            y = [L[i][1] for i in range(n)]
+    
+            plt.plot(x,y,color = 'magenta', marker = 'o')
+            plt.xticks(range(0, maxElements + 1, 1))
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title("Convex Hull QuickHull")
+            plt.show()
         elif name in noList:
             print("Do you want to exit?")
             choice = input()
