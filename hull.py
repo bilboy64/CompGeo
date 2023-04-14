@@ -46,13 +46,36 @@ def cmp(p0=[0,0],p1=[0,0],p2=[0,0]):
         return 1
     
     
+# Defining a function that calculates which side of line (ab) p belongs in 
+# Note: It's almost like calculating the orientation predicate determinant,
+# but we also return a value based on turn of a,b,p
+def findSide(a=[0,0],b=[0,0],p=[0,0]):
+    result = (p[1] - a[1]) * (b[0] - a[0]) - (b[1] - a[1]) * (p[0] - a[0])
+    
+    if result > 0:
+        return 1
+    elif result < 0:
+        return -1
+    else:
+        return 0
+    
 
+# Defining a function that calculates distance of element p from line (ab)
+def distLine(a=[0,0],b=[0,0],p=[0,0]):
+    return abs((p[1] - a[1]) * (b[0] - a[0]) - (b[1] - a[1]) * (p[0] - a[0]))
+
+
+
+     
 
 # Implementation 
 print("\n\t\t Convex Hull Algorithms \n\n")
 
     
+    
+    
 # 1. Graham's Scan Algorithm (R2) 
+
 def GrahamsScan2(P = []):
 
     n = len(P)      # Defining n = |P|
@@ -89,7 +112,11 @@ def GrahamsScan2(P = []):
     return L
         
     
+    
+    
+    
 # 2. Gift-wrapping (Jarvis March) Algorithm (R2)
+
 def JarvisMarch(P = []):
     
     n = len(P)
@@ -120,18 +147,77 @@ def JarvisMarch(P = []):
     L.append(L[0])  
     return L
         
+        
     
-# 3. QuickHull Algorithm in R2
-def QuickHull(P = []):
-    L = []
     
-    return L
+# 3. Recursive QuickHull Algorithm in R2
 
+# Here, we define Hull as a global list since 
+# our algorithm is recursive and we don't want
+# it to reset on every call
+quickHullL = []
+
+# Note: p1 is the start and p2 the end of line (p1p2) <line>.
+# Also, <side> is an indication of the position of element P[i]
+# in relation to line (p1p2)
+def QuickHull(P=[], p1=[0,0], p2=[0,0], side = 0):
+   
+    n = len(P)
+    index = -1
+    maxDistance = 0
     
+    # Searching for point of P with max distance from line (p1p2)
+    # (also calculating its turn)
+    for i in range(n): 
+        dist = distLine(p1,p2,P[i])
+        if dist > maxDistance and findSide(p1,p2,P[i]) == side:
+            index = 1
+            maxDistance = dist
+    
+    # If no such point was found, add points p1 and p2 to hull
+    if index == -1:
+        quickHullL.append(p1)
+        quickHullL.append(p2)
+        return
+    
+    # Repeat algorithm for parts of convex hull separated by P[index]
+    QuickHull(P, P[index], p1, -findSide(P[index], p1, p2))
+    QuickHull(P, P[index], p2, -findSide(P[index], p2, p1))
+    
+    
+# Defining function that prints vertices of convex hull calculated 
+# by the QuickHull algorithm
+def printHull(P=[]):
+    
+    n = len(P)
+    
+    # Finding points with min and max x coordinate
+    xMin = 0
+    xMax = 0
+    for i in range(1,n):
+        if P[i][0] < P[xMin][0]:
+            xMin = i
+        if P[i][0] > P[xMax][0]:
+            xMax = i
+            
+    # Recursively calculate convex hull on both sides
+    # of line (P[xMin][0]P[xMax][0])
+    QuickHull(P,P[xMin], P[xMax], 1)
+    QuickHull(P,P[xMin], P[xMax], -1) 
+    
+    # Printing elements of convex hull
+    print(quickHullL)
+        
+            
   
 # Main function 
 def main():
     maxElements = 80
+    
+    if maxElements < 3:
+        print("Convex Hull is not possible! Enter a valid number of elements.")
+        return
+    
     points = [(random.randint(-10,100),random.randint(-10,100)) for i in range(maxElements)]     # Creating <maxElements> random points of R2   
     noList = ["No","NO","no","nO"]
     yesList = ["Yes","yes","YES", "yES", "yeS", "YEs"]
@@ -180,11 +266,11 @@ def main():
             print("Points:", points)
             print("Length of point list:" , len(points))
             
-            L = QuickHull(points)
-            n = len(L)
-            print("Convex Hull: ", L)
+            printHull(points)
+            L = quickHullL
+            n = len(quickHullL)
             print("Vertices:", n)
-                        
+            
             x = [L[i][0] for i in range(n)]
             y = [L[i][1] for i in range(n)]
     
@@ -192,7 +278,7 @@ def main():
             plt.xticks(range(0, maxElements + 1, 1))
             plt.xlabel('x')
             plt.ylabel('y')
-            plt.title("Convex Hull QuickHull")
+            plt.title("`Convex Hull QuickHull`")
             plt.show()
         elif name in noList:
             print("Do you want to exit?")
