@@ -85,6 +85,7 @@ def GrahamsScan2(P = []):
     
     # Creating list of convex hull vertices L
     L = LUpper + LLower
+    L.append(L[0])
     return L
         
     
@@ -116,6 +117,7 @@ def JarvisMarch(P = []):
         if p == pos:
             break
         
+    L.append(L[0])  
     return L
         
     
