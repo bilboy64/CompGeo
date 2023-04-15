@@ -262,7 +262,7 @@ def main():
     while(1):
         print("Please insert the algorithm's name:")
         name = input()
-        if name == "Graham's Scan":
+        if name == "Graham's Scan R2":
             print("Points:", points)
             print("Length of point list:" , len(points))
             
