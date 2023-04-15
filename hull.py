@@ -318,6 +318,23 @@ def main():
             plt.ylabel('y')
             plt.title("`Convex Hull QuickHull`")
             plt.show()
+        elif name == "Divide and Conquer":
+            print("Points:", points)
+            print("Length of point list:" , len(points))
+            
+            L = divideAndConquer(points)
+            n = len(L)
+            print("Vertices:", n)
+            
+            x = [L[i][0] for i in range(n)]
+            y = [L[i][1] for i in range(n)]
+    
+            plt.plot(x,y,color = 'magenta', marker = 'o')
+            plt.xticks(range(0, maxElements + 1, 1))
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title("`Convex Hull DC`")
+            plt.show()
         elif name in noList:
             print("Do you want to exit?")
             choice = input()
