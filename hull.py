@@ -146,11 +146,49 @@ def JarvisMarch(P = []):
         
     L.append(L[0])  
     return L
+
+
         
+# 3. Divide and Conquer Convex Hull algorithm in R2
+def divideAndConquer(P=[]):
+    
+    n = len(P)
+    # Sorting elements of P in lexicographic order
+    P.sort()
+    
+    # Finding leftmost and rightmost points a and b
+    a = P[0]
+    b = P[n-1]
+    
+    # Finding set of points to the left and right side 
+    # of line (ab)
+    
+    # Convention: In case of collinearity, apply infinitesimal 
+    # displacement method as follows: There's a 50% chance that 
+    # elements y-coordinate will shift upward by 0.2 and 50% 
+    # chance that it will shift downward by 0.2. Thus, the former
+    # element belongs in leftSet and latter in rightSet
+    leftSet = set()
+    rightSet = set()
+    for i in range(1,n-1):
+        turn = orientation2(a,b,P[i])
         
+        if turn > 0:        # Counter-clockwise, so left side
+            leftSet.add(P[i])
+        elif turn < 0:      # Clockwise, so right side
+            rightSet.add(P[i])
+        else: 
+            if random.randint(0,1) == 0:
+                P[i][1] = P[i][1] + 0.2
+                leftSet.add(P[i])
+            else:
+                P[i][1] = P[i][1] - 0.2
+                rightSet.add(P[i])
+
     
     
-# 3. Recursive QuickHull Algorithm in R2
+    
+# 4. Recursive QuickHull Algorithm in R2
 
 # Here, we define Hull as a global list since 
 # our algorithm is recursive and we don't want
@@ -171,7 +209,7 @@ def QuickHull(P=[], p1=[0,0], p2=[0,0], side = 0):
     for i in range(n): 
         dist = distLine(p1,p2,P[i])
         if dist > maxDistance and findSide(p1,p2,P[i]) == side:
-            index = 1
+            index = i
             maxDistance = dist
     
     # If no such point was found, add points p1 and p2 to hull
@@ -262,7 +300,7 @@ def main():
             plt.title("Convex Hull Jarvis March")
             plt.show()
             
-        elif name == "QuickHull":
+        elif name == "Quick Hull":
             print("Points:", points)
             print("Length of point list:" , len(points))
             
