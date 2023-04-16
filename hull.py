@@ -121,7 +121,7 @@ def GrahamsScan2(P = []):
     
     
     
-# 2. Gift-wrapping (Jarvis March) Algorithm (R2)
+# 2a. Gift-wrapping (Jarvis March) Algorithm (R2)
 
 def JarvisMarch(P = []):
     
@@ -154,6 +154,81 @@ def JarvisMarch(P = []):
     return L
 
 
+
+
+
+# 2b. Gift-wrapping (Jarvis March) Algorithm in R2 with STEP-BY-STEP visualization
+
+def JarvisMarchStep(P=[]):
+    
+    n = len(P)
+    
+    # Finding leftmost point P[r0] (r0 is index)
+    r0 = 0        
+    for i in range(1,n):
+        if P[i][0] < P[r0][0]:
+            r0 = i
+        elif P[i][0] == P[r0][0]:
+            if P[i][1] > P[r0][1]: 
+                r0 = i
+    
+    # Defining its position as an extra variable           
+    pos = P.index(P[r0])
+    
+    # Initializing list of convex hull vertices and elements p and q
+    L = []            
+    p = pos
+    q = 0
+    while(1):
+        L.append(P[p])
+        
+        # Calculating q as the next, sequentially, element of P  
+        q = (p + 1) % n
+        
+        # Iterating over every element of P except for r0, which is the leftmost point
+        for i in range(n):       
+            det = orientation2(P[p],P[i],P[q])
+            
+            # Calculating turn of r0,i,q, if they are collinear then choose the farthest element
+            if det < 0 or (det == 0 and SqDist(P[i],P[p]) > SqDist(P[q],P[p])):
+                q = i
+        p = q
+        
+        # Plotting convex hull as it stands in current iteration
+        currentLength = len(L)
+        x = [L[i][0] for i in range(currentLength)]
+        y = [L[i][1] for i in range(currentLength)]
+            
+        plt.plot(x,y,color = 'magenta', marker = 'o')
+        plt.xticks(range(0, n + 1, 1))
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.title("Convex Hull Jarvis March")
+        plt.show()     
+        
+        if p == pos:
+            break
+    
+    # Lastly, add the first convex hull vertex at the end of the list 
+    # So, we need to print the final step of the algorithm    
+    L.append(L[0]) 
+    
+    currentLength = len(L)
+    x = [L[i][0] for i in range(currentLength)]
+    y = [L[i][1] for i in range(currentLength)]
+        
+    plt.plot(x,y,color = 'magenta', marker = 'o')
+    plt.xticks(range(0, n + 1, 1))
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title("Convex Hull Jarvis March")
+    plt.show() 
+ 
+    return L
+    
+   
+    
+    
         
 # 3. Divide and Conquer Convex Hull algorithm in R2
 def divideAndConquer(P=[]):
@@ -191,6 +266,7 @@ def divideAndConquer(P=[]):
                 P[i][1] = P[i][1] - 0.2
                 rightSet.add(P[i])
 
+    
     
     
     
@@ -305,6 +381,13 @@ def main():
             plt.ylabel('y')
             plt.title("Convex Hull Jarvis March")
             plt.show()
+            
+        elif name == "Jarvis March step-by-step" or name == "Gift-Wrapping step-by-step":
+            print("\n\nVisualizing STEPS of Convex Hull calculation algorithm JARVIS MARCH\n\n\n")
+            
+            L = JarvisMarchStep(points)
+            print("Convex Hull: ", L)
+            print("Vertices: ", len(L))
             
         elif name == "Quick Hull":
             print("Points:", points)
