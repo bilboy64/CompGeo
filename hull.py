@@ -88,7 +88,8 @@ def GrahamsScan2(P = []):
     LUpper = []     
     LLower = []
     
-    P.sort()        # Organize elements in lexicographic order (sort() method by default does that in python)
+    # Organize elements in lexicographic order (sort() method by default does that in python)
+    P.sort()        
         
     # Creating LUpper
     LUpper.append(P[0])     # Insert first and second element in LUpper 
@@ -101,7 +102,7 @@ def GrahamsScan2(P = []):
 
             
     # Creating LLower
-    LLower.append(P[n-1])       # n is 1-based, so last two elements are P[n-2] and P[n-1]
+    LLower.append(P[n-1])       # Reminder: n is 1-based, so last two elements are P[n-2] and P[n-1]
     LLower.append(P[n-2])
     for i in range(n-3,1,-1):
         LLower.append(P[i])
@@ -114,9 +115,12 @@ def GrahamsScan2(P = []):
     
     # Creating list of convex hull vertices L
     L = LUpper + LLower
+    
+    # Lastly, add the first convex hull vertex at the end of the list 
     L.append(L[0])
     return L
         
+    
     
     
     
@@ -126,33 +130,44 @@ def GrahamsScan2(P = []):
 def JarvisMarch(P = []):
     
     n = len(P)
-    r0 = 0        # Finding leftmost point P[r0] (r0 is index)
+    
+    # Finding leftmost point P[r0] (r0 is index)
+    r0 = 0        
     for i in range(1,n):
         if P[i][0] < P[r0][0]:
             r0 = i
         elif P[i][0] == P[r0][0]:
             if P[i][1] > P[r0][1]: 
                 r0 = i
-                
-    pos = P.index(P[r0])
-    L = []        # Initialize list of convex hull vertices with element r0
     
+    # Defining its position as an extra variable           
+    pos = P.index(P[r0])
+    
+    # Initializing list of convex hull vertices and elements p and q
+    L = []            
     p = pos
     q = 0
     while(1):
         L.append(P[p])
+        
+        # Calculating q as the next, sequentially, element of P  
         q = (p + 1) % n
-        for i in range(n):        # We iterate over every element of P except for r0, which is the leftmost point
-            det = orientation2(P[p],P[i],P[q])         # Calculating turn of r0,i,q, if they are collinear then choose the farthest element
+        
+        # Iterating over every element of P except for r0, which is the leftmost point
+        for i in range(n):       
+            det = orientation2(P[p],P[i],P[q])
+            
+            # Calculating turn of r0,i,q, if they are collinear then choose the farthest element
             if det < 0 or (det == 0 and SqDist(P[i],P[p]) > SqDist(P[q],P[p])):
                 q = i
         p = q
         if p == pos:
             break
-        
+    
+    # Lastly, add the first convex hull vertex at the end of the list     
     L.append(L[0])  
     return L
-
+   
 
 
 
