@@ -1,7 +1,7 @@
-import sys 
 import random
 import matplotlib.rcsetup as rcsetup
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 # NOTES: 
@@ -22,6 +22,12 @@ import matplotlib.pyplot as plt
 def orientation2(p0 = [0,0], p1 = [0,0], p2 = [0,0]):
     return (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p2[0] - p0[0]) * (p1[1] - p0[1])
     
+
+# Defining orientation predicate function in R3 using numpy library
+def orientation3(p0=[0,0,0],p1=[0,0,0],p2=[0,0,0],p3=[0,0,0]):
+    a = np.array([[1,p0[0],p0[1],p0[2]], [1,p1[0],p1[1],p1[2]], [1,p2[0],p2[1],p2[2]], [1,p3[0],p3[1],p3[2]]])
+    return np.linalg.det(a)
+
 
 
 # Defining function that calculates squared distance between two elements of R2
