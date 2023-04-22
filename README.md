@@ -59,4 +59,4 @@
 ### Χρόνος Υλοποίησης:
 Ο πιο γρήγορος αλγόριθμος ήταν ο *Graham's Scan* (αναμενόμενο λόγω χρονικής πολυπλοκότητας O(nlogn)), έπειτα ο *Jarvis March* (με χρονική πολυπλοκότητα O(n) best-case, O(nlogn)
 average-case και Ο(n²) worst-case) μαζί με τον *Divide and Conquer* (με χρονική πολυπλοκότητα Ο(nlogn) και αναδρομικό τύπο T(n) = 2T(n/2) + O(n)) και τέλος ο *QuickHull* (αναδρομικός αλγόριθμος με πολυπλοκότητα T(n) = 2T(n/2) + O(n)). Κάποιο ενδεικτικοί χρόνοι εκτέλεσης παρέχονται στο 
-python notebook αρχείο, όπου οι *Graham's Scan* και *Jarvis March* απέχουν περίπου κατά 2 με 4 microseconds (και λιγότερο), ο *DC* απέχει λίγα 10̂̂̂̂-5 δευτερόλεπτα από τον Jarvis March και τα ίδια microseconds από τον Graham's Scan, ενώ ο *QuickHull* απέχει milliseconds από τους προηγούμενους. 
+python notebook αρχείο, όπου οι *Graham's Scan* και *Jarvis March* απέχουν περίπου κατά 2 με 4 microseconds (και λιγότερο), ο *DC* απέχει λίγα 10^(-5) δευτερόλεπτα από τον Jarvis March και τα ίδια microseconds από τον Graham's Scan, ενώ ο *QuickHull* απέχει milliseconds από τους προηγούμενους. 
