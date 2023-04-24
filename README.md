@@ -57,4 +57,32 @@
 περιβλήματος στο επίπεδο, επομένως το πλήθος των διακεκριμένων κορυφών των ΚΠ2 και ΚΠ3 θα είναι πάντα ίσο με len(L) - 1 (εξαιρούμε την τελευταία).
 
 ### Χρόνος Υλοποίησης:
-Ο πιο γρήγορος αλγόριθμος ήταν ο *Graham's Scan* (αναμενόμενο λόγω χρονικής πολυπλοκότητας O(nlogn)), μετά ο *Divide and Conquer* (με χρονική πολυπλοκότητα Ο(nlogn) και αναδρομικό τύπο T(n) = 2T(n/2) + O(n)), έπειτα ο *Jarvis March* (με χρονική πολυπλοκότητα O(n) best-case, O(nlogn) average-case και Ο(n²) worst-case) και τέλος ο *QuickHull* (αναδρομικός αλγόριθμος με πολυπλοκότητα T(n) = 2T(n/2) + O(n)). Κάποιο ενδεικτικοί χρόνοι εκτέλεσης παρέχονται στο python notebook αρχείο, όπου οι *Graham's Scan* και *Jarvis March* απέχουν περίπου κατά 2 με 4 microseconds (και λιγότερο), ο *DC* απέχει λίγα 10^(-5) δευτερόλεπτα από τον Jarvis March και τα ίδια microseconds από τον Graham's Scan, ενώ ο *QuickHull* απέχει milliseconds από τους προηγούμενους. 
+Ο πιο γρήγορος αλγόριθμος ήταν ο *Graham's Scan* (αναμενόμενο λόγω χρονικής πολυπλοκότητας O(nlogn)), μετά ο *Divide and Conquer* (με χρονική πολυπλοκότητα Ο(nlogn) και αναδρομικό τύπο T(n) = 2T(n/2) + O(n)), έπειτα ο *Jarvis March* (με χρονική πολυπλοκότητα O(n) best-case, O(nlogn) average-case και Ο(n²) worst-case) και τέλος ο *QuickHull* (αναδρομικός αλγόριθμος με πολυπλοκότητα T(n) = 2T(n/2) + O(n)). Κάποιο ενδεικτικοί χρόνοι εκτέλεσης παρέχονται στο python notebook αρχείο, όπου οι *Graham's Scan* και *Jarvis March* απέχουν περίπου κατά 2 με 4 microseconds (και λιγότερο), ο *DC* απέχει λίγα 10^(-5) δευτερόλεπτα από τον Jarvis March και τα ίδια microseconds από τον Graham's Scan, ενώ ο *QuickHull* απέχει milliseconds από τους προηγούμενους. Ακολουθούν δειγματοληπτικά κάποιοι χρόνοι εκτέλεσης των αλγορίθμων για n = maxElements πλήθος σημείων:
+
+    - Για n = 10:   Graham's Scan: 3.350002225488424e-05 seconds
+                    Jarvis March: 7.099995855242014e-05 seconds
+                    Divide and Conquer: 0.00019529997371137142 seconds
+                    Quick Hull: 0.001019100018311292 seconds 
+
+    - Για n = 50:   Graham's Scan: 0.00020460004452615976 seconds
+                    Jarvis March: 0.00044979999074712396 seconds
+                    Divide and Conquer: 0.0004331000382080674 seconds
+                    Quick Hull: 0.013872500043362379 seconds
+
+    - Για n = 80:   Graham's Scan: 0.0002606000052765012 seconds
+                    Jarvis March: 0.000811500009149313 seconds
+                    Divide and Conquer: 0.0005769999697804451 seconds
+                    Quick Hull: 0.02215709997108206 seconds 
+
+    - Για n = 200:  Graham's Scan: 0.0006315000355243683 seconds
+                    Jarvis March: 0.005710199999157339 seconds
+                    Divide and Conquer: 0.004599700041580945 seconds
+                    Quick Hull: 0.06990030000451952 seconds 
+
+    - Για n = 1000: Graham's Scan: 0.0029365000082179904 seconds
+                    Jarvis March: 0.0061485999613069 seconds
+                    Divide and Conquer: 0.0037409999640658498 seconds
+                    Quick Hull: 0.1859311999869533 seconds 
+
+                        
+Όπως φαίνεται από τα παραπάνω αποτελέσματα, ο χρόνος εκτέλεσης των αλγορίθμω αυξάνεται δραστικά σε μικρότερο πλήθος σημείων, μειώνεται στα 50 σημεία και μετά από τα 50 σημεία η αύξηση του χρόνου εκτέλεσης είναι ανάλογη της αύξησης του πλήθους των n σημείων. Συγκεκριμένα, ο χρόνος εκτέλεσης του *Graham's Scan* είναι σταθερά ανάμεσα στα 0.0002 με 0.0006 seconds και αυξάνεται στα 0.002 για 50 <= n <= 1000, ενώ στο ίδιο διάστημα ο *Jarvis March* δίνει 0.0004 με 0.005 seconds, o *Divide and Conquer* 0.0004 με 0.004 και ο *Quick Hull*  0.01 με 0.1 seconds. Για n = 10, οι *Graham's Scan* και *Jarvis March* παρουσιάζουν αρκετά μεγαλύτερους χρόνους εκτέλεσης στα 3 με 7 seconds, ενώ οι *Divide and Conquer*  και *Quick Hull* 0.0001 και 0.001 seconds.
